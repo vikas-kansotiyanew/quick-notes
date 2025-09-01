@@ -1,24 +1,22 @@
-# Frontend Dockerfile - no Nginx
-FROM node:18-alpine
+# Stage 1: Build React app
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
-# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
-
-# Copy all frontend source code
 COPY . .
-
-# Build the React app
 RUN npm run build
 
-# Install lightweight static server globally
-RUN npm install -g serve
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
 
-# Expose port for Render
-ENV PORT 3000
-EXPOSE 3000
+# Copy React build to Nginx
+COPY --from=build /app/build /usr/share/nginx/html
 
-# Start the frontend using serve
-CMD ["serve", "-s", "build", "-l", "3000"]
+# Copy custom Nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
