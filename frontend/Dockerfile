@@ -3,23 +3,22 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
+# Copy package files and install dependencies
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy source code
+# Copy all frontend source code
 COPY . .
 
-# Build the application
+# Build the React app
 RUN npm run build
 
-# Install a lightweight static server
+# Install lightweight static server globally
 RUN npm install -g serve
 
-# Expose port
+# Expose port for Render
+ENV PORT 3000
 EXPOSE 3000
 
-# Start the frontend
+# Start the frontend using serve
 CMD ["serve", "-s", "build", "-l", "3000"]
