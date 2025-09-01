@@ -1,4 +1,4 @@
-# Frontend Dockerfile
+# Frontend Dockerfile - no Nginx
 FROM node:18-alpine
 
 WORKDIR /app
@@ -15,13 +15,11 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Use nginx to serve the built application
-FROM nginx:alpine
-COPY --from=0 /app/dist /usr/share/nginx/html
+# Install a lightweight static server
+RUN npm install -g serve
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Expose port
+EXPOSE 3000
 
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Start the frontend
+CMD ["serve", "-s", "build", "-l", "3000"]

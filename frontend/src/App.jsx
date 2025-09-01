@@ -13,7 +13,7 @@ const NotesApp = () => {
   const [editNote, setEditNote] = useState({ title: '', content: '' });
   const [loading, setLoading] = useState(false);
 
-  const API_BASE = process.env.REACT_APP_API_URL || 'https://quick-notes-s2kk.onrender.com';
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   // API functions
   const api = {
