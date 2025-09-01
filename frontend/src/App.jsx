@@ -13,7 +13,7 @@ const NotesApp = () => {
   const [editNote, setEditNote] = useState({ title: '', content: '' });
   const [loading, setLoading] = useState(false);
 
-  const API_BASE = process.env.REACT_APP_API_URL || '/api';
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   // API functions
   const api = {
